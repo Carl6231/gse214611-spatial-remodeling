@@ -1,0 +1,9 @@
+Module,Evaluable genes,Status
+down__peak_1HR,3,NOT_APPLICABLE
+down__peak_Day1,53,Evaluable
+down__peak_Day3,294,Evaluable
+down__peak_Day7,24,Evaluable
+up__peak_1HR,66,Evaluable
+up__peak_Day1,88,Evaluable
+up__peak_Day3,114,Evaluable
+up__peak_Day7,86,Evaluable

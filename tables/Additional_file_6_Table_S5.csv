@@ -1,0 +1,13 @@
+Target,State,Samples,Median displacement,Transition mass to Spp1 state
+Bhlhe40,Monocyte_Ccr2,16,0.428,0.000
+Bhlhe40,Macrophage_Spp1,16,0.586,1.000
+Runx2,Monocyte_Ccr2,16,0.479,0.000
+Runx2,Macrophage_Spp1,16,0.501,1.000
+Arid5b,Monocyte_Ccr2,16,0.385,0.000
+Arid5b,Macrophage_Spp1,16,0.441,1.000
+Mef2c,Monocyte_Ccr2,16,0.489,0.000
+Mef2c,Macrophage_Spp1,16,0.537,1.000
+Maf,Monocyte_Ccr2,16,0.514,0.000
+Maf,Macrophage_Spp1,16,0.622,1.000
+Spi1,Monocyte_Ccr2,16,0.655,0.000
+Spi1,Macrophage_Spp1,16,0.567,1.000
