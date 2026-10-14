@@ -91,7 +91,7 @@ if(wants('Figure_3')){
   support_plot<-support_plot+scale_size_area(max_size=3,name='Samples',breaks=c(1,3,6))+
     scale_fill_gradient(low='#F0F4F8',high=COL_SHAM,limits=c(0,1),breaks=c(0,.5,1),name='Fraction')+
     guides(size=guide_legend(nrow=1),fill=guide_colorbar(barwidth=unit(12,'mm'),barheight=unit(2,'mm')))+
-    theme(legend.position='bottom',legend.box='horizontal',legend.title=element_text(size=6.5),legend.spacing.x=unit(1,'mm'))
+    theme(legend.position='bottom',legend.box='horizontal',legend.title=element_text(size=6.5,margin=margin(r=11)),legend.spacing.x=unit(2,'mm'))
   rows<-list(a,b,wrap_plots(list(block(balanced_plot,'c','Balanced reference counts'),block(support_plot,'d','Reference timepoint support')),ncol=2),
     e,block(cal_plot,'f','Mapping calibration · all physical tissues'),
     wrap_plots(list(block(state_support,'g','Five-state support · n = samples'),h),ncol=2,widths=c(.43,.57)),

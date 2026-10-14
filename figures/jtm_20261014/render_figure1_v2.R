@@ -143,7 +143,7 @@ architecture_plot <- ggplot() +
             fill = "#F5F6F7", colour = group_summary$colour, linewidth = 0.48) +
   geom_text(data = group_summary, aes(x, 1.08, label = box_label), family = FONT_V2,
             size = 6.5 / GG_PT, lineheight = 0.72, colour = COL_AXIS) +
-  annotate("segment", x = 1.42, xend = 4.70, y = 0.20, yend = 0.20,
+  annotate("segment", x = 1.42, xend = 4.30, y = 0.20, yend = 0.20,
            linewidth = 0.35, colour = "#8A9199", arrow = arrow(length = unit(1.7, "mm"))) +
   annotate("text", x = 0.55, y = 0.28, label = "10 GEO\ncaptures", hjust = 0,
            family = FONT_V2, size = 6.5 / GG_PT, fontface = "bold", lineheight = 0.9) +
@@ -180,11 +180,15 @@ resolved_assets <- Map(function(path, gsm) {
   save_spot_asset(path, paste0("F1b_resolved_", gsm), values, c("Sham", "Needle-pass"),
                   c(Sham = COL_SHAM, "Needle-pass" = COL_NEEDLE), 74, 47, 0.49)
 }, mixed_labeled, names(mixed_labeled))
-hero_plate <- spatial_plate_v2(
-  c(unname(before_assets), unname(resolved_assets)), nrow = 2, ncol = 2,
-  col_labels = names(mixed_raw), row_labels = c("Before assignment", "Author-resolved"),
-  row_label_width = 0.12, header_height = 0.075
-)
+hero_columns <- lapply(names(mixed_raw), function(gsm) {
+  wrap_plots(list(strip_text_v2(gsm), img_panel_compact_v2(before_assets[[gsm]]),
+                  img_panel_compact_v2(resolved_assets[[gsm]])),
+             ncol = 1, heights = c(.075, .4625, .4625))
+})
+hero_labels <- wrap_plots(list(plot_spacer(), strip_text_v2("Before assignment", hjust = 1),
+                               strip_text_v2("Author-resolved", hjust = 1)),
+                         ncol = 1, heights = c(.075, .4625, .4625))
+hero_plate <- wrap_plots(c(list(hero_labels), hero_columns), ncol = 3, widths = c(.5, 1, 1))
 mixed_key <- ggplot(data.frame(
   x = 1:2, y = 1, label = c("Sham", "Needle-pass"),
   fill = c(COL_SHAM, COL_NEEDLE)
