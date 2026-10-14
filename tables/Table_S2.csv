@@ -1,0 +1,12 @@
+Class,Initial six-class labels,Corrected full reference,Balanced reference
+B_cell,Not separated,271,271
+Cardiomyocyte,96062,96062,3000
+Dendritic,Not separated,545,545
+Endothelial,24702,25732,3000
+Fibroblast,29985,34879,3000
+Macrophage,18438,8693,3000
+Monocyte,Not separated,1892,1892
+Neutrophil,Not separated,891,891
+Pericyte,7311,7311,3000
+Schwann_cell,28,28,28
+T_NK,Not separated,222,222
