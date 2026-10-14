@@ -1,5 +1,5 @@
-source('/home/zhenhanli/myocardial/scop/GSE214611_spatial/22_JTM_completion_20261014/figures_polished/script/figure_common_v2.R')
-OUT <- file.path(ROOT,'22_JTM_completion_20261014/figures_polished/corrected4')
+source('/home/zhenhanli/myocardial/scop/GSE214611_spatial/22_JTM_completion_20261014/figures_structured/script/figure_common_v2.R')
+OUT <- file.path(ROOT,'22_JTM_completion_20261014/figures_structured/corrected4')
 dir.create(file.path(OUT,'figures'),recursive=TRUE,showWarnings=FALSE)
 ASSET_V2 <- file.path(OUT,'tmp/f4_panels')
 dir.create(ASSET_V2,recursive=TRUE,showWarnings=FALSE)

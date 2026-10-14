@@ -41,7 +41,7 @@ if(wants('Figure_S9')){
     if(!file.exists(path))path<-spatial_values(object_path(k),setNames(z$signature_score,z$barcode),id,c(-lim,lim),c(COL_CONTRACTILE,COL_ZERO,COL_FIBROTIC),midpoint=0,width=54,height=42)
     heading(img_panel_compact_v2(path),LABEL[k])
   })
-  a<-block(wrap_plots(list(wrap_plots(continuum,ncol=3),continuous_bar_v2(c(-lim,lim),c(COL_CONTRACTILE,COL_ZERO,COL_FIBROTIC),'Continuum score',midpoint=0,vertical=FALSE)),ncol=1,heights=c(1,.12)),'a','Frozen MI continuum · shared display range')
+  a<-block(wrap_plots(list(wrap_plots(continuum,ncol=3),continuous_bar_v2(c(-lim,lim),c(COL_CONTRACTILE,COL_ZERO,COL_FIBROTIC),'Continuum score',midpoint=0,vertical=FALSE)),ncol=1,heights=c(1,.12)),'d','Frozen MI continuum · shared display range')
   o<-readRDS(object_path('MI_Day7_rep2'));mat<-suppressWarnings(tryCatch(LayerData(o,assay=DefaultAssay(o),layer='data'),error=function(e)NULL))
   raw<-is.null(mat)||any(dim(mat)==0L);if(raw)mat<-LayerData(o,assay=DefaultAssay(o),layer='counts')
   mean_set<-function(gs){x<-mat[intersect(gs,rownames(mat)),,drop=FALSE];if(raw)x@x<-log1p(x@x);v<-Matrix::colMeans(x);names(v)<-colnames(o);v}
@@ -51,7 +51,7 @@ if(wants('Figure_S9')){
   score_plots<-lapply(seq_along(scores),function(i){v<-scores[[i]];limit<-as.numeric(quantile(v,c(.01,.99),na.rm=TRUE));id<-paste0('S9_score_',i);p<-file.path(ASSET_V2,paste0(id,'.png'))
     if(!file.exists(p))p<-spatial_values(object_path('MI_Day7_rep2'),v,id,limit,purple,width=54,height=42)
     heading(wrap_plots(list(img_panel_compact_v2(p),continuous_bar_v2(limit,purple,'Score',vertical=TRUE)),ncol=2,widths=c(1,.22)),names(scores)[i])})
-  c<-block(wrap_plots(score_plots,ncol=3),'c','Representative scores · MI D7 r2 · separate scales')
+  c<-block(wrap_plots(score_plots,ncol=3),'e','Representative scores · MI D7 r2 · separate scales')
   px<-ggplot(ext,aes(internal_median_rho,external_LAD_D7_vs_D3,colour=signature_direction))+geom_hline(yintercept=0,linewidth=.25,colour='#BAC2C8')+geom_vline(xintercept=0,linewidth=.25,colour='#BAC2C8')+
     geom_point(size=.7,alpha=.7)+scale_colour_manual(values=c(negative=COL_CONTRACTILE,positive=COL_FIBROTIC),guide='none')+labs(x='Internal spatial ρ',y='External LAD D7 − D3')+quiet_theme
   pq<-ggplot(quality[condition=='MI' & timepoint=='Day7'],aes(covariate,spearman_rho,group=sample_key,colour=sample_key))+geom_hline(yintercept=0,linewidth=.25,colour='#BAC2C8')+
@@ -60,7 +60,7 @@ if(wants('Figure_S9')){
   summary<-spot[center==TRUE & is.finite(signature_score),.(value=median(signature_score)),by=sample_key]
   ps<-ggplot(summary,aes(factor(sample_key,levels=SAMPLE),value))+geom_hline(yintercept=0,linewidth=.25,colour='#BAC2C8')+geom_point(aes(colour=role(sample_key)),size=1.3)+
     scale_colour_manual(values=role_cols_v2,guide='none')+scale_x_discrete(NULL,labels=short_label)+labs(y='Median center score')+quiet_theme+theme(axis.text.x=element_text(angle=45,hjust=1))
-  d<-block(wrap_plots(list(heading(px,'External challenge'),heading(pq,'Technical challenge'),heading(ps,'Physical-tissue summary')),ncol=3),'d','Saved challenges · no new selection or inference')
+  d<-block(wrap_plots(list(heading(px,'External challenge'),heading(pq,'Technical challenge'),heading(ps,'Physical-tissue summary')),ncol=3),'f','Saved challenges · no new selection or inference')
   pages<-list(wrap_plots(list(page_title('Figure_S9','Continuum and robustness'),a,c,d,note('One spatial summary point = one physical tissue. 1 h/4 h are descriptive; Needle-pass is auxiliary.')),
     ncol=1,heights=c(6,92,58,60,5)))
   genes<-c('Serpinh1','Thbs2','Cthrc1','Myh6','Myl2','Tnni3')
@@ -68,7 +68,7 @@ if(wants('Figure_S9')){
   for(i in 1:2){idx<-((i-1)*3+1):(i*3)
     pages[[i+1]]<-wrap_plots(list(page_title('Figure_S9',paste0('Fixed-gene atlas · ',i,'/2')),
       block(wrap_plots(list(wrap_plots(c(list(plot_spacer()),lapply(LABEL[d7],strip_text_v2),list(plot_spacer())),ncol=5,widths=c(.20,1,1,1,.31)),
-        wrap_plots(rows[idx],ncol=1)),ncol=1,heights=c(.07,1)),'b',if(i==1)'Fixed genes · Day 7 replicates' else 'Fixed genes · continued'),
+        wrap_plots(rows[idx],ncol=1)),ncol=1,heights=c(.07,1)),'g',if(i==1)'Fixed genes · Day 7 replicates' else 'Fixed genes · continued'),
       note('Each gene has one shared 1–99% display range across the three Day 7 tissues. Frozen expression layer; no normalization rerun.')),
       ncol=1,heights=unit.c(unit(6,'mm'),unit(1,'null'),unit(6,'mm')))
   }

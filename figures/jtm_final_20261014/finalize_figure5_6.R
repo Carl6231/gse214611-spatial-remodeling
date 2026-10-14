@@ -1,5 +1,5 @@
 #!/usr/bin/env Rscript
-source("/home/zhenhanli/myocardial/scop/GSE214611_spatial/22_JTM_completion_20261014/figures_polished/script/figure_common_v2.R")
+source("/home/zhenhanli/myocardial/scop/GSE214611_spatial/22_JTM_completion_20261014/figures_structured/script/figure_remaining_helpers.R")
 
 STAGE_V2 <- file.path(V2,"tmp","figure5_6_refined")
 ASSET_V2 <- file.path(STAGE_V2,"assets")
@@ -455,6 +455,46 @@ draw_block <- function(p,x,y,w,h,letter,title,sub=NULL) {
 }
 map_direct<-function(path,x,y,w,h){im<-png::readPNG(path);ratio<-dim(im)[2]/dim(im)[1];ww<-min(w,h*ratio);hh<-ww/ratio;grid.raster(im,x=unit(x+w/2,'mm'),y=unit(225-y-h/2,'mm'),width=unit(ww,'mm'),height=unit(hh,'mm'),interpolate=FALSE)}
 decomp_plot <- decomp_plot + scale_y_discrete(labels=c('remodeling axis'='Remodeling axis','Trem2 Spp1 macrophage'='Trem2 / Spp1','remote axis'='Remote axis','vascular axis'='Vascular axis'))
+
+# Existing per-tissue fits: visualization only, no regression or CV is rerun.
+model_source <- read_table(file.path(ROOT,'results/phase11/continuum_variance_partition.tsv'))
+model_source <- model_source[record_type=='model_fit' & outcome=='signature_score']
+stopifnot(nrow(model_source)==12L,all(model_source$cv_status=='complete_5_spatial_fold_cv'))
+joint <- model_source[model=='Model_D'][match(d7,sample_key)]
+stopifnot(nrow(joint)==3L,identical(joint$n_spots,c(2313L,2403L,2357L)),
+          all(joint$residual_variance_fraction<.25),
+          max(abs(joint$r2+joint$residual_variance_fraction-1))<1e-12)
+joint[,tissue:=factor(sample_key,levels=d7,labels=paste0('D7 r',1:3))]
+model_metric <- function(field,label,residual=FALSE) {
+  z<-copy(joint);z[,value:=get(field)*if(residual)100 else 1]
+  q<-ggplot(z,aes(tissue,value))+geom_point(size=2.1,colour=COL_D7)+
+    geom_text(aes(label=if(residual)sprintf('%.1f%%',value)else sprintf('%.3f',value)),
+      vjust=-.9,size=6.5/GG_PT,family=FONT_V2)+labs(x=NULL,y=label)+theme_editorial_v2()
+  if(residual)q<-q+geom_hline(yintercept=25,linetype=2,colour=COL_FIBROTIC,linewidth=.4)+
+    scale_y_continuous(limits=c(0,30),breaks=c(0,10,20,25)) else
+    q<-q+scale_y_continuous(limits=c(.9,1),breaks=c(.9,.95,1))
+  q
+}
+model_plots<-list(model_metric('r2','Joint-model R²'),model_metric('cross_validated_r2','Spatial-block CV R²'),
+                  model_metric('residual_variance_fraction','Residual variance (%)',TRUE))
+model_source[,tissue:=factor(sample_key,levels=d7,labels=paste0('D7 r',1:3))]
+model_source[,model:=factor(model,levels=paste0('Model_',LETTERS[1:4]))]
+model_cols<-c('D7 r1'='#C7B6E3','D7 r2'='#9A78C6','D7 r3'='#72509E')
+comparison<-lapply(c('r2','cross_validated_r2'),function(metric){
+  ggplot(model_source,aes(model,.data[[metric]],group=tissue,colour=tissue))+geom_line(linewidth=.4)+geom_point(size=1.8)+
+    scale_colour_manual(values=model_cols,name=NULL)+scale_x_discrete(labels=c('Zones','Composition','RNA / QC','Joint'))+
+    scale_y_continuous(limits=c(0,1),breaks=c(0,.5,1))+labs(x=NULL,y=if(metric=='r2')'R²' else 'Spatial-block CV R²')+
+    theme_editorial_v2()+theme(legend.position='bottom',axis.text.x=element_text(size=6.6))})
+s9_model_page<-wrap_plots(list(
+ strip_text_v2('Supplementary Figure S9 | Model sensitivity and cellular sources',8.2,'bold',0),
+ block(wrap_plots(comparison,ncol=2,guides='collect'),'a','Four saved covariate models',
+       'A: transcriptomic zones · B: corrected composition · C: RNA/QC · D: all covariates'),
+ block(cell_plot,'b','Signature across reference classes','Colour: sample median; symbol size: sample count; open ring: n = 1'),
+ block(decomp_plot,'c','Axis-extreme composition differences'),
+ note('Fixed 200-gene outcome. Each curve is one physical tissue; spatial-block CV does not assess transfer to independent animals.',6.6)),
+ ncol=1,heights=c(7,70,83,40,7))
+export_supplement(list(s9_model_page),'Figure_S9_models',225)
+
 fig5<-function(){
  grid.newpage()
  draw_block(ggplot()+theme_void(),2,2,179,55,'a','Day 7 expression signature','Shared symmetric score range across the three tissues')
@@ -463,7 +503,7 @@ fig5<-function(){
  draw_block(physical_plot,2,59,179,30,'b','Tissue-level signature summaries','One point per physical tissue; 1 h and 4 h are descriptive')
  draw_block(gene_plot,2,94,53,67,'c','Nonconstruction genes','Descriptive correlations')
  draw_block(path_plot,58,94,123,67,'d','Pathway polarity','Nine fixed pathways · saved enrichment scores')
- draw_block((cell_plot|decomp_plot)+plot_layout(widths=c(.60,.40)),2,166,179,56,'e','Cell sources and signature decomposition','Colour: sample median; symbol size: sample count; open ring: n = 1')
+ draw_block(wrap_plots(model_plots,ncol=3),2,166,179,56,'e','Dependence on composition and RNA quality','Saved joint models; dashed line: 25% residual-variance criterion')
 }
 fig6<-function(){
  grid.newpage()

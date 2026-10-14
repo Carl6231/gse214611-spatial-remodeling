@@ -45,8 +45,23 @@ The original outputs used SCOP 0.8.9 and 0.9.0. The completion and revised plott
 
 Physical tissues and single-nucleus biological samples remain the summary units. Spots, overlapping neighborhoods, nuclei and duplicated ligand-to-receptor mappings are not independent biological replicates. Dominant-mixture contextual relationships, original-label communication candidates, corrected-reference neighborhoods and simulated perturbations retain distinct provenance. Unavailable relationships are not zero effects; completed computations do not establish causality or experimental validation.
 
-## Final figure layout
+## Final main and supplementary figure structure
 
-`figures/jtm_final_20261014` contains the final R/SCOP rendering sources for Figures 1–8 and Supplementary Figures S1–S18. Related views share grouped panels and legends, with a consistent blue, turquoise, coral and violet palette. Figure S18 now spans six pages to show all 72 native vector fields at a readable size. These scripts reuse completed scientific results; no analysis thresholds, candidate sets or statistical values were changed for the layout revision. The frozen canonical-marker heatmap preserves its original color mapping and matching scale. Earlier plotting directories remain historical versions.
+`figures/jtm_final_20261014` contains the current R/SCOP rendering sources for Figures 1–8 and Supplementary Figures S1–S18. Related views share grouped panels and legends with a consistent blue, turquoise, coral and violet palette. The scripts reuse completed scientific results; scientific thresholds, candidate sets, input objects and statistical values are preserved. The frozen canonical-marker heatmap retains its original color mapping and scale.
 
-The subsequent layout refinement enlarges the reference UMAP and selected tissue panels, compacts shared color keys, separates count text from redundant markers, and gives the final two-tissue S15 page an appropriate height. The final rendering root is `22_JTM_completion_20261014/figures_polished`; unchanged supplements retain the preceding rendering. Scientific inputs and reported numerical values are unchanged.
+Main figures present the study sequence; supplementary figures provide complete tissue coverage, model sensitivity and evidence limits:
+
+| Main figure | Supplementary support |
+| --- | --- |
+| 1: tissue registry | S1 complete images; S2 QC and compatibility |
+| 2: initial deconvolution | S3 all tissues, both methods and confidence |
+| 3: corrected reference | S6 lineage/marker/sample support plus complete 11-class maps; S7 fine-state uncertainty |
+| 4: corrected niches | S4–S5 spatial structure/features; S8 corrected primary atlas; S14 original-reference sensitivity |
+| 5: expression and composition | S9 models A–D, cellular sources, axis decomposition, fixed genes and descriptive external challenge |
+| 6: recurrence and candidates | S10 spatial genes; S11 network/module limits; S12 candidate evidence; S13 all perturbations |
+| 7: contextual associations | S15 formal, descriptive/auxiliary and external tissues in separate page groups |
+| 8: SecAct model outputs | S16 activity; S17 tissue-local patterns; S18 paired sending/receiving for each ligand |
+
+Figure 5e directly displays saved joint-model R-squared, spatial-block cross-validated R-squared and residual variance; the former cellular-source and axis-decomposition panels are preserved in S9. S6 appends three pages containing RCTD, SpatialDWLS and mapping-confidence views for all 12 tissues. S8 now displays the corrected 5,151-center primary analysis; the earlier 5,937-center atlas is retained together with the prior main display in S14. S18 uses one ligand per page, with six sending fields above the corresponding six receiving fields, retaining all 72 fields.
+
+Current sources use the rendering root `22_JTM_completion_20261014/figures_structured`; unchanged completed figures can be reused from the preceding render. `render_support_atlases.R` adds S6 maps and renders S8; `render_original_sensitivity.R` renders the three atlas/summary pages appended to the prior S14 display. `finalize_figure5_6.R` generates the new Figure 5 and the model/source page placed before the three S9 spatial pages. Earlier rendering directories remain historical versions. Full scientific input objects are required and are not included in this source archive.

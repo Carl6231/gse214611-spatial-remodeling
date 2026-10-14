@@ -1,6 +1,6 @@
 root<-'/home/zhenhanli/myocardial/scop/GSE214611_spatial'
 .libPaths(c(file.path(root,'21_scop_expansion/_runtime/spacet/R-4.5/site-library'),.libPaths()))
-source(file.path(root,'22_JTM_completion_20261014/figures_polished/script/figure_remaining_helpers.R'))
+source(file.path(root,'22_JTM_completion_20261014/figures_structured/script/figure_remaining_helpers.R'))
 A<-file.path(root,'22_JTM_completion_20261014/P06_SECACT_parallel')
 stopifnot(file.exists(file.path(A,'_SUCCESS')))
 a<-fread(file.path(A,'tables/secact_activity.tsv.gz'))
@@ -53,7 +53,7 @@ page<-wrap_plots(list(block(activity_pair,'a','Activity for six frozen ligands',
  block(vp,'d','Sending and receiving vector coverage','One tissue per point; native arrow lengths are not compared'),
  note('Activity and vector lengths are model quantities, not measured secretion, receptor activation or cellular movement.')),
  ncol=1,heights=c(66,48,101,6))
-export_remaining(page,'Figure_8')
+if(wants('Figure_8'))export_remaining(page,'Figure_8')
 classes<-unique(a[modality=='snRNA',celltype_or_scope]);lim<-max(abs(a[modality=='snRNA' & secretedProtein%in%ligands,zscore]))
 allclass<-lapply(classes,function(ct)activity_heat(a[modality=='snRNA' & celltype_or_scope==ct],sn_ids,labels_sn,gsub('_',' ',ct),lim))
 page1<-wrap_plots(list(strip_text_v2('Supplementary Figure S16 | All reference classes',8,'bold',0),(wrap_plots(allclass,ncol=2,guides='collect') & theme(legend.position='bottom')),
@@ -98,9 +98,8 @@ if(wants('Figure_S17'))export_supplement(pattern_pages,'Figure_S17',225)
 vector_source<-fread(file.path(A,'tables/secact_vector_fields_native_display.tsv.gz'))
 background_source<-fread(file.path(A,'tables/secact_vector_background_native_display.tsv.gz'))
 stopifnot(uniqueN(background_source[,.(sample_id,ligand,signal_mode)])==72L)
-vector_pages<-unlist(lapply(c('sending','receiving'),function(mode){
- lapply(seq(1,6,by=2),function(start){
- blocks<-lapply(ligands[start:(start+1)],function(g){
+vector_pages<-lapply(ligands,function(g){
+ blocks<-lapply(c('sending','receiving'),function(mode){
   panels<-lapply(st_ids,function(id){
    xy<-background_source[sample_id==id & ligand==g & signal_mode==mode]
    sg<-vector_source[sample_id==id & ligand==g & signal_mode==mode]
@@ -111,11 +110,10 @@ vector_pages<-unlist(lapply(c('sending','receiving'),function(mode){
     colour='#278DAB',linewidth=.13,arrow=arrow(length=unit(.45,'mm')))
    heading(q,labels_st[id])
   })
-  block(wrap_plots(panels,ncol=3),'',g)
+  block(wrap_plots(panels,ncol=3),if(mode=='sending')'a'else'b',if(mode=='sending')'Sending fields'else'Receiving fields')
  })
- wrap_plots(c(list(strip_text_v2(paste('Supplementary Figure S18 |',mode,'·',paste(ligands[start:(start+1)],collapse=' / ')),8,'bold',0)),blocks,
+ wrap_plots(c(list(strip_text_v2(paste('Supplementary Figure S18 |',g,'· paired sending and receiving'),8,'bold',0)),blocks,
  list(note('All modeled spots are shown in gray. Native x/y components were independently rescaled; arrow lengths are not activity magnitudes.'))),
  ncol=1,heights=c(7,110,110,8))
 })
-}),recursive=FALSE)
 if(wants('Figure_S18'))export_supplement(vector_pages,'Figure_S18',245)

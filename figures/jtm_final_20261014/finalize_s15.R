@@ -1,4 +1,4 @@
-source('/home/zhenhanli/myocardial/scop/GSE214611_spatial/22_JTM_completion_20261014/figures_polished/script/figure_remaining_helpers.R')
+source('/home/zhenhanli/myocardial/scop/GSE214611_spatial/22_JTM_completion_20261014/figures_structured/script/figure_remaining_helpers.R')
 A<-file.path(ROOT,'22_JTM_completion_20261014/P04_STATIAL_corrected')
 stopifnot(file.exists(file.path(A,'_SUCCESS')))
 d<-fread(file.path(A,'tables/per_sample_kontextual.tsv'))
@@ -9,7 +9,9 @@ shorten<-function(x){for(n in c(Cardiomyocyte='CM',Fibroblast='Fib',Mononuclear_
 d[,pair:=factor(direction_id,levels=rev(pair_order),labels=shorten(rev(pair_order)))]
 cc<-c(Cardiomyocyte='#5B9BD5',Fibroblast='#35B89A',Mononuclear_myeloid='#B57AC3',Neutrophil='#F58F8F',Endothelial='#22A7C7',Pericyte='#B5A2D8',B_cell='#60C3A8',T_cell='#9BCFBB',Unassigned='#B8BCC2')
 # Complete results; external domain numbers have only within-tissue meaning.
-samples<-unique(d$sample_id)
+samples<-c('Day3_Sham_rep1','Day3_Sham_rep2',paste0('MI_D3_rep',1:3),paste0('MI_D7_rep',1:3),'MI_1HR_rep1','MI_4HR_rep1','Day3_Needle_pass_rep3','Day3_Needle_pass_rep4','WT_Sham_rep1',paste0('WT_MI_D1_rep',1:3),paste0('WT_MI_D7_rep',1:3),paste0('WT_MI_D14_rep',1:3))
+stopifnot(setequal(samples,unique(d$sample_id)),!anyDuplicated(samples))
+page_roles<-c('Primary formal tissues','Primary formal tissues','Descriptive and auxiliary tissues','External cohort · sample-local contexts','External cohort · sample-local contexts','External cohort · sample-local contexts')
 pages<-lapply(seq(1,length(samples),by=4),function(start){
  panels<-lapply(samples[start:min(start+3,length(samples))],function(id){
   x<-d[sample_id==id]
@@ -18,7 +20,7 @@ pages<-lapply(seq(1,length(samples),by=4),function(start){
    scale_x_discrete(labels=function(x)gsub('_',' ',x,fixed=TRUE))+labs(x=NULL,y=NULL)+theme_editorial_v2()+theme(axis.line=element_blank(),axis.ticks=element_blank(),axis.text.x=element_text(angle=40,hjust=1),legend.position='bottom')
   heading(p,paste(gsub('_',' ',id),gsub('_',' ',unique(x$context_source),fixed=TRUE),sep='\n'))
  })
- wrap_plots(list(strip_text_v2(paste('Supplementary Figure S15 | All contextual relationships',start,'–',min(start+3,length(samples))),8,'bold',0),wrap_plots(panels,ncol=2,guides='collect') & theme(legend.position='bottom'),
+ wrap_plots(list(strip_text_v2(paste('Supplementary Figure S15 |',page_roles[(start-1)%/%4+1]),8,'bold',0),wrap_plots(panels,ncol=2,guides='collect') & theme(legend.position='bottom'),
  note('×: not evaluable because a class is absent. Each panel is one tissue. External BANKSY labels are not homologous anatomical regions.')),
  ncol=1,heights=unit.c(unit(7,'mm'),unit(1,'null'),unit(6,'mm')))
 })
