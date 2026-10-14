@@ -1,4 +1,4 @@
-source('/home/zhenhanli/myocardial/scop/GSE214611_spatial/22_JTM_completion_20261014/figures_structured/script/figure_remaining_helpers.R')
+source('/home/zhenhanli/myocardial/scop/GSE214611_spatial/22_JTM_completion_20261014/figures_reviewed/script/figure_remaining_helpers.R')
 
 cohort_labels <- c('Formal comparison · Sham and Day 3',
                    'Formal comparison · Day 3 and Day 7',
@@ -6,6 +6,7 @@ cohort_labels <- c('Formal comparison · Sham and Day 3',
 confidence_cols <- c(High='#36B6A4',Moderate='#9A78C6',Low='#F4777F',Unavailable='#D7DDE2')
 broad_blocks <- niche_blocks <- vector('list',12)
 niche_cols <- NICHE
+niche_cols['Uncertain'] <- '#6F6F6F'
 names(niche_cols)[names(niche_cols)=='Not_macrophage_rich'] <- 'Not_macrophage_center'
 niche_names <- c('Inflammatory','Mac–fibro remodeling','Vascular repair','Remote resident','Uncertain','Not selected')
 names(niche_names) <- names(niche_cols)
@@ -31,7 +32,7 @@ for(i in seq_along(SAMPLE)) {
   check[is.na(Freq),Freq:=0L]
   stopifnot(all(check$n==check$Freq),sum(tab$n)==length(z))
   tab[,fraction:=n/sum(n)]
-  native <- spatial_category(o,'P09N_niche',niche_cols,paste0('S8_corrected_',k),width=60,height=48)
+  native <- spatial_category(o,'P09N_niche',niche_cols,paste0('S8_corrected_final_',k),width=60,height=48)
   proportions <- ggplot(tab,aes(1,fraction,fill=factor(niche,levels=names(niche_cols))))+
     geom_col(width=.5,colour='white',linewidth=.15)+coord_flip()+
     scale_fill_manual(values=niche_cols,guide='none')+scale_y_continuous(limits=c(0,1),expand=c(0,0))+
@@ -55,11 +56,11 @@ for(j in 1:3) {
     note('All retained spots remain visible. Broad classes are mixture estimates; Low confidence is not a separate biological class.',6.7)),
     ncol=1,heights=unit.c(unit(c(6,5,5),'mm'),unit(1,'null'),unit(c(15,6),'mm')))
   niche_pages[[j]] <- wrap_plots(list(
-    strip_text_v2(paste('Supplementary Figure S8 | Corrected-reference niche atlas',j,'/ 3'),8.2,'bold',0),
+    strip_text_v2(paste('Supplementary Figure S8 | Rule-defined niches · corrected reference',j,'/ 3'),8.2,'bold',0),
     note(cohort_labels[j],7.1,0),wrap_plots(niche_blocks[idx],ncol=2),
     legend_strip(niche_cols,niche_names,rows=2),
-    note('Fixed S054 rules; 5,151 centers across 12 tissues. Bars show within-tissue center fractions; gray spots were not selected.',6.7)),
+    note('Fixed S054 rules; 5,151 centers across 12 tissues. Bars: center fractions. Light gray: not selected; dark gray: uncertain.',6.7)),
     ncol=1,heights=unit.c(unit(c(6,5),'mm'),unit(1,'null'),unit(c(10,6),'mm')))
 }
-export_supplement(broad_pages,'Figure_S6_extended',245)
-export_supplement(niche_pages,'Figure_S8',225)
+if(wants('Figure_S6'))export_supplement(broad_pages,'Figure_S6_extended',245)
+if(wants('Figure_S8'))export_supplement(niche_pages,'Figure_S8',225)

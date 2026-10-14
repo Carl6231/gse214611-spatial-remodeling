@@ -55,7 +55,7 @@ if(wants('Figure_S9')){
   px<-ggplot(ext,aes(internal_median_rho,external_LAD_D7_vs_D3,colour=signature_direction))+geom_hline(yintercept=0,linewidth=.25,colour='#BAC2C8')+geom_vline(xintercept=0,linewidth=.25,colour='#BAC2C8')+
     geom_point(size=.7,alpha=.7)+scale_colour_manual(values=c(negative=COL_CONTRACTILE,positive=COL_FIBROTIC),guide='none')+labs(x='Internal spatial ρ',y='External LAD D7 − D3')+quiet_theme
   pq<-ggplot(quality[condition=='MI' & timepoint=='Day7'],aes(covariate,spearman_rho,group=sample_key,colour=sample_key))+geom_hline(yintercept=0,linewidth=.25,colour='#BAC2C8')+
-    geom_line(linewidth=.3)+geom_point(size=1)+scale_colour_manual(values=setNames(c(COL_D3,COL_DESC,COL_SHAM),d7),labels=LABEL[d7],name=NULL)+
+    geom_line(linewidth=.3)+geom_point(size=1)+scale_colour_manual(values=setNames(c('#C7B6E3','#9A78C6','#72509E'),d7),labels=LABEL[d7],name=NULL)+
     labs(x=NULL,y='Within-slice ρ')+quiet_theme+theme(axis.text.x=element_text(angle=40,hjust=1),legend.position='bottom')+guides(colour=guide_legend(nrow=1))
   summary<-spot[center==TRUE & is.finite(signature_score),.(value=median(signature_score)),by=sample_key]
   ps<-ggplot(summary,aes(factor(sample_key,levels=SAMPLE),value))+geom_hline(yintercept=0,linewidth=.25,colour='#BAC2C8')+geom_point(aes(colour=role(sample_key)),size=1.3)+

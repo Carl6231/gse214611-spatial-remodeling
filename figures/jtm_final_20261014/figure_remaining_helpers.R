@@ -1,4 +1,4 @@
-source('/home/zhenhanli/myocardial/scop/GSE214611_spatial/22_JTM_completion_20261014/figures_structured/script/figure_common_v2.R')
+source('/home/zhenhanli/myocardial/scop/GSE214611_spatial/22_JTM_completion_20261014/figures_reviewed/script/figure_common_v2.R')
 
 STAGE_V2 <- Sys.getenv('REMAINING_STAGE', file.path(V2, 'tmp', 'remaining_build'))
 stopifnot(startsWith(normalizePath(STAGE_V2, mustWork=FALSE), paste0(V2, '/tmp/')))

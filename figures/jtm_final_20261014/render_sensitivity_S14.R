@@ -1,6 +1,6 @@
 #!/usr/bin/env Rscript
 
-source("/home/zhenhanli/myocardial/scop/GSE214611_spatial/22_JTM_completion_20261014/figures_structured/script/figure_common_v2.R")
+source("/home/zhenhanli/myocardial/scop/GSE214611_spatial/22_JTM_completion_20261014/figures_reviewed/script/figure_common_v2.R")
 
 BUILD_ROOT <- Sys.getenv("REDESIGN_V2_BUILD_ROOT", unset = "")
 if (!nzchar(BUILD_ROOT) || !dir.exists(BUILD_ROOT)) {

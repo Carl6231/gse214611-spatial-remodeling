@@ -11,7 +11,7 @@ suppressPackageStartupMessages(suppressWarnings({
 
 ROOT <- "/home/zhenhanli/myocardial/scop/GSE214611_spatial"
 V1 <- file.path(ROOT, "21_scop_expansion", "PUBLICATION_FIGURE_REDESIGN")
-V2 <- file.path(ROOT, "22_JTM_completion_20261014", "figures_structured")
+V2 <- file.path(ROOT, "22_JTM_completion_20261014", "figures_reviewed")
 FIG_V2 <- file.path(V2, "figures", "main")
 QA_V2 <- file.path(V2, "qa")
 STAGE_V2 <- file.path(V2, "tmp", "figure5_build")

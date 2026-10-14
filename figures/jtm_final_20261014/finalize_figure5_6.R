@@ -1,5 +1,5 @@
 #!/usr/bin/env Rscript
-source("/home/zhenhanli/myocardial/scop/GSE214611_spatial/22_JTM_completion_20261014/figures_structured/script/figure_remaining_helpers.R")
+source("/home/zhenhanli/myocardial/scop/GSE214611_spatial/22_JTM_completion_20261014/figures_reviewed/script/figure_remaining_helpers.R")
 
 STAGE_V2 <- file.path(V2,"tmp","figure5_6_refined")
 ASSET_V2 <- file.path(STAGE_V2,"assets")
@@ -399,8 +399,11 @@ oracle_long <- melt(oracle, id.vars = c("target", "status"),
                     variable.name = "metric", value.name = "raw_value")
 oracle_long[, metric := factor(metric, levels = c("median_displacement", "transition_mass"),
                                labels = c("Median\ndisplacement", "Transition\nmass"))]
-oracle_long[, within_metric_z := if (sd(raw_value, na.rm = TRUE) > 0)
+oracle_long[, within_metric_z := if (sd(raw_value, na.rm = TRUE) > sqrt(.Machine$double.eps)*max(1,max(abs(raw_value))))
   as.numeric(scale(raw_value)) else 0, by = metric]
+# Numerically constant transition summaries must not acquire contrasting colors.
+stopifnot(all(abs(oracle$transition_mass-.5)<sqrt(.Machine$double.eps)),
+          all(oracle_long[metric=="Transition\nmass",within_metric_z]==0))
 status_points <- unique(oracle[, .(target, status)])
 metric_levels <- c("Median\ndisplacement", "Transition\nmass", "Status")
 oracle_long[, metric := factor(as.character(metric), levels = metric_levels)]
@@ -516,7 +519,7 @@ fig6<-function(){
  }
  for(j in 1:2){g<-c('Sdf4','Abca1')[j];draw_block(continuous_bar_v2(gene_limits[[g]],colorRampPalette(c('#EFF5FA','#74B5C1','#234F70'))(9),'log1p'),164,56+(j-1)*34,16,37,'','')}
  draw_block(axis_plot,2,134,179,45,'c','Candidate ligand–receptor axes','Original communication labels; no receptor-specific causal claim')
- draw_block(oracle_plot,2,183,179,39,'d','CellOracle perturbation summaries','All six targets failed the prespecified module-consistency criterion')
+ draw_block(oracle_plot,2,183,179,39,'d','CellOracle perturbation summaries','Within-metric color scale; constant columns neutral. All targets: NEGATIVE_COMPLETE')
 }
 for(n in 5:6){stem<-file.path(STAGE_V2,paste0('Figure_',n,'_final'));fun<-get(paste0('fig',n))
  cairo_pdf(paste0(stem,'.pdf'),width=183/25.4,height=225/25.4);fun();dev.off()

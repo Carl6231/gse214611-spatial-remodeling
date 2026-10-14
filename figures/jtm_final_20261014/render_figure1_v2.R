@@ -1,6 +1,6 @@
 #!/usr/bin/env Rscript
 
-source("/home/zhenhanli/myocardial/scop/GSE214611_spatial/22_JTM_completion_20261014/figures_structured/script/figure_common_v2.R")
+source("/home/zhenhanli/myocardial/scop/GSE214611_spatial/22_JTM_completion_20261014/figures_reviewed/script/figure_common_v2.R")
 
 BUILD_ROOT <- Sys.getenv("REDESIGN_V2_BUILD_ROOT", unset = "")
 if (!nzchar(BUILD_ROOT) || !dir.exists(BUILD_ROOT)) {
@@ -290,7 +290,7 @@ reference_plot <- ggplot(reference, aes(log10_reference_cells, display)) +
   labs(x = "Reference nuclei (log10 view)", y = NULL) + theme_editorial_v2() +
   theme(axis.line.y = element_blank(), axis.ticks.y = element_blank(),
         plot.margin = margin(1, 2, 1, 1, unit = "mm"))
-panel_f <- evidence_header_v2(reference_plot, "f", "snRNA-seq reference",
+panel_f <- evidence_header_v2(reference_plot, "f", "Initial snRNA-seq reference",
                               "176,526 nuclei · Schwann n=28 (caution)")
 
 # g | Common genes plus 6 × 12 marker-detection heatmap.
@@ -333,12 +333,18 @@ compatibility_block <- wrap_plots(list(common_plot, marker_heat), ncol = 2, widt
 panel_g <- evidence_header_v2(compatibility_block, "g", "Reference compatibility",
                               "Six prespecified broad-cell-type marker sets across 12 physical tissues")
 
-# h | Low-ink analytical spot accounting.
+# h | Account for the corrected primary analysis; preserve legacy counts in S14.
+primary_counts <- read_tsv_v2(file.path(ROOT,'metadata/phase_09_niche_grid_slice_summary.tsv'))[setting_id=='S054']
+primary_n <- sum(primary_counts$Freq)
+primary_uncertain <- sum(primary_counts[niche=='Uncertain',Freq])
+primary_assigned <- primary_n-primary_uncertain
+stopifnot(primary_n==5151L,primary_assigned==3964L,primary_uncertain==1187L)
+
 accounting_plot <- ggplot() +
   annotate("rect", xmin = 0.2, xmax = 2.15, ymin = 0.23, ymax = 0.77,
            fill = "#F0F2F4", colour = "#7C858E", linewidth = 0.38) +
   annotate("rect", xmin = 3.2, xmax = 5.15, ymin = 0.23, ymax = 0.77,
-           fill = "#EEE5EC", colour = "#9B6688", linewidth = 0.38) +
+           fill = "#F0EBF8", colour = "#9A78C6", linewidth = 0.38) +
   annotate("rect", xmin = 6.25, xmax = 7.95, ymin = 0.53, ymax = 0.96,
            fill = "#E2F0ED", colour = COL_DESC, linewidth = 0.38) +
   annotate("rect", xmin = 6.25, xmax = 7.95, ymin = 0.04, ymax = 0.47,
@@ -351,16 +357,16 @@ accounting_plot <- ggplot() +
            colour = "#7C858E", linewidth = 0.38, arrow = arrow(length = unit(1.8, "mm"))) +
   annotate("text", x = 1.175, y = 0.5, label = "25,548 retained\ntissue spots",
            family = FONT_V2, size = 7.1 / GG_PT, fontface = "bold", lineheight = 0.92) +
-  annotate("text", x = 4.175, y = 0.5, label = "5,937 macrophage-rich\n23.2% of retained",
+  annotate("text", x = 4.175, y = 0.5, label = sprintf("%s corrected centers\n%.1f%% of retained",format(primary_n,big.mark=","),100*primary_n/nrow(qc)),
            family = FONT_V2, size = 7.1 / GG_PT, fontface = "bold", lineheight = 0.92) +
-  annotate("text", x = 7.10, y = 0.745, label = "4,143 assigned\n69.8% of selected",
+  annotate("text", x = 7.10, y = 0.745, label = sprintf("%s assigned\n%.1f%% of selected",format(primary_assigned,big.mark=","),100*primary_assigned/primary_n),
            family = FONT_V2, size = 7.1 / GG_PT, fontface = "bold", lineheight = 0.92) +
-  annotate("text", x = 7.10, y = 0.255, label = "1,794 Uncertain\n30.2% of selected",
+  annotate("text", x = 7.10, y = 0.255, label = sprintf("%s uncertain\n%.1f%% of selected",format(primary_uncertain,big.mark=","),100*primary_uncertain/primary_n),
            family = FONT_V2, size = 7.1 / GG_PT, fontface = "bold", lineheight = 0.92) +
   coord_cartesian(xlim = c(0, 8.15), ylim = c(0, 1), expand = FALSE, clip = "off") +
   theme_void(base_family = FONT_V2) + theme(plot.margin = margin(0, 1, 0, 1, unit = "mm"))
-panel_h <- evidence_header_v2(accounting_plot, "h", "Spot accounting",
-                              "Counts are descriptive pipeline units, not biological replicates", header_mm = 9)
+panel_h <- evidence_header_v2(accounting_plot, "h", "Corrected primary-analysis accounting",
+                              "S054 rules · full corrected atlas: S8 · original-reference sensitivity: S14", header_mm = 9)
 
 figure1 <- wrap_plots(list(
   panel_a,

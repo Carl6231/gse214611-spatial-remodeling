@@ -1,6 +1,6 @@
 root<-'/home/zhenhanli/myocardial/scop/GSE214611_spatial'
 .libPaths(c(file.path(root,'21_scop_expansion/_runtime/spacet/R-4.5/site-library'),.libPaths()))
-source(file.path(root,'22_JTM_completion_20261014/figures_structured/script/figure_remaining_helpers.R'))
+source(file.path(root,'22_JTM_completion_20261014/figures_reviewed/script/figure_remaining_helpers.R'))
 A<-file.path(root,'22_JTM_completion_20261014/P06_SECACT_parallel')
 stopifnot(file.exists(file.path(A,'_SUCCESS')))
 a<-fread(file.path(A,'tables/secact_activity.tsv.gz'))

@@ -1,4 +1,4 @@
-source('/home/zhenhanli/myocardial/scop/GSE214611_spatial/22_JTM_completion_20261014/figures_structured/script/figure_remaining_helpers.R')
+source('/home/zhenhanli/myocardial/scop/GSE214611_spatial/22_JTM_completion_20261014/figures_reviewed/script/figure_remaining_helpers.R')
 A<-file.path(ROOT,'22_JTM_completion_20261014/P04_STATIAL_corrected')
 stopifnot(file.exists(file.path(A,'_SUCCESS')))
 d<-fread(file.path(A,'tables/per_sample_kontextual.tsv'))

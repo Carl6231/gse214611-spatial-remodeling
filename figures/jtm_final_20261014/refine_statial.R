@@ -1,4 +1,4 @@
-source('/home/zhenhanli/myocardial/scop/GSE214611_spatial/22_JTM_completion_20261014/figures_structured/script/figure_remaining_helpers.R')
+source('/home/zhenhanli/myocardial/scop/GSE214611_spatial/22_JTM_completion_20261014/figures_reviewed/script/figure_remaining_helpers.R')
 A<-file.path(ROOT,'22_JTM_completion_20261014/P04_STATIAL_corrected')
 stopifnot(file.exists(file.path(A,'_SUCCESS')))
 d<-fread(file.path(A,'tables/per_sample_kontextual.tsv'))
@@ -34,13 +34,15 @@ pt<-ggplot(sel,aes(zone,kontextual,colour=sample,shape=direction))+geom_hline(yi
  theme_editorial_v2()+theme(legend.position='bottom',legend.box='horizontal',legend.title=element_blank(),axis.text.x=element_text(size=6))
 coverage<-d[,.(Evaluable=sum(status=='EVALUABLE'),Unavailable=sum(status!='EVALUABLE')),by=.(sample_id,cohort)]
 cv<-melt(coverage,id.vars=c('sample_id','cohort'),variable.name='status',value.name='relationships')
-cv[,sample_id:=factor(sample_id,levels=unique(coverage$sample_id))]
+display_samples<-c('Day3_Sham_rep1','Day3_Sham_rep2',paste0('MI_D3_rep',1:3),paste0('MI_D7_rep',1:3),'MI_1HR_rep1','MI_4HR_rep1','Day3_Needle_pass_rep3','Day3_Needle_pass_rep4','WT_Sham_rep1',paste0('WT_MI_D1_rep',1:3),paste0('WT_MI_D7_rep',1:3),paste0('WT_MI_D14_rep',1:3))
+stopifnot(setequal(display_samples,unique(coverage$sample_id)),!anyDuplicated(display_samples))
+cv[,sample_id:=factor(sample_id,levels=display_samples)]
 compact_samples<-setNames(levels(cv$sample_id),levels(cv$sample_id))
 for (pat in c('WT_MI_','Day3_Needle_pass','Day3_NeedlePass','Day3_Sham','MI_','_rep','_')) {
  replacement<-switch(pat,'WT_MI_'='WT ','Day3_Needle_pass'='Needle','Day3_NeedlePass'='Needle','Day3_Sham'='Sham','MI_'='','_rep'=' r','_'=' ')
  compact_samples[]<-gsub(pat,replacement,compact_samples,fixed=TRUE)
 }
-coverageplot<-ggplot(cv,aes(sample_id,relationships,fill=status))+geom_col(width=.8)+scale_fill_manual(values=c(Evaluable='#348C90',Unavailable='#D7DDE2'))+
+coverageplot<-ggplot(cv,aes(sample_id,relationships,fill=status))+geom_col(width=.8)+geom_vline(xintercept=c(8.5,12.5),colour='#AEB7C2',linewidth=.25,linetype='dashed')+scale_fill_manual(values=c(Evaluable='#348C90',Unavailable='#D7DDE2'))+
  scale_x_discrete(labels=compact_samples)+labs(x=NULL,y='Records')+theme_editorial_v2()+theme(axis.text.x=element_text(angle=60,hjust=1,size=6.3),legend.position='bottom',legend.title=element_blank())
 rows<-list(block(mapblock,'a','Dominant cell classes across infarct tissues'),
  block(heat,'b','Contextual relationships · 200 µm','×: absent class; –: absent region. Descriptive values; no significance test'),

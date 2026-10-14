@@ -1,5 +1,5 @@
-source('/home/zhenhanli/myocardial/scop/GSE214611_spatial/22_JTM_completion_20261014/figures_structured/script/figure_common_v2.R')
-OUT <- file.path(ROOT,'22_JTM_completion_20261014/figures_structured/corrected4')
+source('/home/zhenhanli/myocardial/scop/GSE214611_spatial/22_JTM_completion_20261014/figures_reviewed/script/figure_common_v2.R')
+OUT <- file.path(ROOT,'22_JTM_completion_20261014/figures_reviewed/corrected4')
 dir.create(file.path(OUT,'figures'),recursive=TRUE,showWarnings=FALSE)
 ASSET_V2 <- file.path(OUT,'tmp/f4_panels')
 dir.create(ASSET_V2,recursive=TRUE,showWarnings=FALSE)
@@ -110,7 +110,7 @@ draw_page <- function() {
   draw_plot(p_a,2,2,60,30,'a','Reference and fixed settings')
   draw_plot(p_b,66,2,115,30,'b','5,151 corrected centers')
   grid.text('c',x=unit(2,'mm'),y=unit(190,'mm'),just='left',gp=gpar(fontfamily=FONT_V2,fontsize=10,fontface='bold'))
-  grid.text('Spatial niches · corrected reference',x=unit(6,'mm'),y=unit(190,'mm'),just='left',gp=gpar(fontfamily=FONT_V2,fontsize=7.4,fontface='bold'))
+  grid.text('Rule-defined niches · corrected reference',x=unit(6,'mm'),y=unit(190,'mm'),just='left',gp=gpar(fontfamily=FONT_V2,fontsize=7.4,fontface='bold'))
   for(i in 1:6) {
     x<-17+((i-1)%%3)*54; y<-43+((i-1)%/%3)*36
     if(i<=3) grid.text(paste0('r',i),x=unit(x+26.5,'mm'),y=unit(225-y+2,'mm'),gp=gpar(fontfamily=FONT_V2,fontsize=7.2,fontface='bold'))

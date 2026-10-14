@@ -35,7 +35,7 @@ key<-wrap_elements(full=grobTree(
   textGrob('RCTD macrophage fraction',x=.5,y=.15,gp=gpar(fontfamily=FONT_V2,fontsize=7.1)),
   textGrob('1',x=unit(.5,'npc')+unit(23,'mm'),y=.72,just='left',gp=gpar(fontfamily=FONT_V2,fontsize=7.1))))
 atlas <- wrap_plots(list(atlas,key),ncol=1,heights=unit.c(unit(1,'null'),unit(6,'mm')))
-a <- block(atlas,'a','Macrophage spatial distribution')
+a <- block(atlas,'a','Macrophage spatial distribution','Initial six-class reference; corrected-reference support is shown in Figure 3 and S6')
 
 bd <- burden[sample_key %in% FORMAL]
 bd[, group:=factor(role(sample_key),levels=c('Sham','MI Day 3','MI Day 7'))]
