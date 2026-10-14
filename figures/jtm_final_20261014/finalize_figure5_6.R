@@ -1,5 +1,5 @@
 #!/usr/bin/env Rscript
-source("/home/zhenhanli/myocardial/scop/GSE214611_spatial/22_JTM_completion_20261014/figures_final/script/figure_common_v2.R")
+source("/home/zhenhanli/myocardial/scop/GSE214611_spatial/22_JTM_completion_20261014/figures_polished/script/figure_common_v2.R")
 
 STAGE_V2 <- file.path(V2,"tmp","figure5_6_refined")
 ASSET_V2 <- file.path(STAGE_V2,"assets")
@@ -353,8 +353,6 @@ axis_half_plot_v2 <- function(ranks) {
     geom_hline(yintercept = seq_len(nrow(d)), linewidth = 0.18, colour = "#E8EAED") +
     geom_text(aes(x = 1, label = paste0(n_supported_stages, "/2")), family = FONT_V2,
               size = 7.1 / GG_PT, colour = COL_AXIS) +
-    geom_point(aes(x = 2, size = tissue_size), shape = 21, stroke = 0.35,
-               colour = COL_AXIS, fill = "#E7F0FA") +
     geom_text(aes(x = 2, label = paste0(n_discovery_supporting_tissues, "/6")), family = FONT_V2,
               size = 7.1 / GG_PT, colour = COL_AXIS) +
     geom_tile(aes(x = 3, fill = minimum_component_coverage), width = 0.72, height = 0.72,
@@ -456,6 +454,7 @@ draw_block <- function(p,x,y,w,h,letter,title,sub=NULL) {
  grid.draw(if(inherits(p,'patchwork'))patchworkGrob(p)else ggplotGrob(p));upViewport(2)
 }
 map_direct<-function(path,x,y,w,h){im<-png::readPNG(path);ratio<-dim(im)[2]/dim(im)[1];ww<-min(w,h*ratio);hh<-ww/ratio;grid.raster(im,x=unit(x+w/2,'mm'),y=unit(225-y-h/2,'mm'),width=unit(ww,'mm'),height=unit(hh,'mm'),interpolate=FALSE)}
+decomp_plot <- decomp_plot + scale_y_discrete(labels=c('remodeling axis'='Remodeling axis','Trem2 Spp1 macrophage'='Trem2 / Spp1','remote axis'='Remote axis','vascular axis'='Vascular axis'))
 fig5<-function(){
  grid.newpage()
  draw_block(ggplot()+theme_void(),2,2,179,55,'a','Day 7 expression signature','Shared symmetric score range across the three tissues')
@@ -464,7 +463,7 @@ fig5<-function(){
  draw_block(physical_plot,2,59,179,30,'b','Tissue-level signature summaries','One point per physical tissue; 1 h and 4 h are descriptive')
  draw_block(gene_plot,2,94,53,67,'c','Nonconstruction genes','Descriptive correlations')
  draw_block(path_plot,58,94,123,67,'d','Pathway polarity','Nine fixed pathways · saved enrichment scores')
- draw_block(cell_plot|decomp_plot,2,166,179,56,'e','Cell sources and signature decomposition','Colour: sample median; area: sample count; open ring: n = 1')
+ draw_block((cell_plot|decomp_plot)+plot_layout(widths=c(.60,.40)),2,166,179,56,'e','Cell sources and signature decomposition','Colour: sample median; symbol size: sample count; open ring: n = 1')
 }
 fig6<-function(){
  grid.newpage()
@@ -476,8 +475,8 @@ fig6<-function(){
   map_direct(gene_assets[[paste(g,d7[i],sep='|')]],x,y,46,32)
  }
  for(j in 1:2){g<-c('Sdf4','Abca1')[j];draw_block(continuous_bar_v2(gene_limits[[g]],colorRampPalette(c('#EFF5FA','#74B5C1','#234F70'))(9),'log1p'),164,56+(j-1)*34,16,37,'','')}
- draw_block(axis_plot,2,137,179,40,'c','Candidate ligand–receptor axes','Original communication labels; no receptor-specific causal claim')
- draw_block(oracle_plot,2,182,179,40,'d','CellOracle perturbation summaries','All six targets failed the prespecified module-consistency criterion')
+ draw_block(axis_plot,2,134,179,45,'c','Candidate ligand–receptor axes','Original communication labels; no receptor-specific causal claim')
+ draw_block(oracle_plot,2,183,179,39,'d','CellOracle perturbation summaries','All six targets failed the prespecified module-consistency criterion')
 }
 for(n in 5:6){stem<-file.path(STAGE_V2,paste0('Figure_',n,'_final'));fun<-get(paste0('fig',n))
  cairo_pdf(paste0(stem,'.pdf'),width=183/25.4,height=225/25.4);fun();dev.off()

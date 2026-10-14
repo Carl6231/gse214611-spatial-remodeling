@@ -1,4 +1,4 @@
-source('/home/zhenhanli/myocardial/scop/GSE214611_spatial/22_JTM_completion_20261014/figures_final/script/figure_remaining_helpers.R')
+source('/home/zhenhanli/myocardial/scop/GSE214611_spatial/22_JTM_completion_20261014/figures_polished/script/figure_remaining_helpers.R')
 A<-file.path(ROOT,'22_JTM_completion_20261014/P04_STATIAL_corrected')
 stopifnot(file.exists(file.path(A,'_SUCCESS')))
 d<-fread(file.path(A,'tables/per_sample_kontextual.tsv'))
@@ -10,7 +10,7 @@ d[,pair:=factor(direction_id,levels=rev(pair_order),labels=shorten(rev(pair_orde
 cc<-c(Cardiomyocyte='#5B9BD5',Fibroblast='#35B89A',Mononuclear_myeloid='#B57AC3',Neutrophil='#F58F8F',Endothelial='#22A7C7',Pericyte='#B5A2D8',B_cell='#60C3A8',T_cell='#9BCFBB',Unassigned='#B8BCC2')
 maps<-lapply(ids,function(id){x<-readRDS(file.path(A,'objects',paste0(id,'_Statial.rds')))$backend$input
  x$class<-sub('@.*','',x$cellType)
- p<-ggplot(x,aes(x/1000,-y/1000,colour=class))+geom_point(size=.25)+scale_colour_manual(values=cc,drop=FALSE)+coord_equal()+theme_void()+theme(legend.position='none')
+ p<-ggplot(x,aes(x/1000,-y/1000,colour=class))+geom_point(size=.29)+scale_colour_manual(values=cc,drop=FALSE)+coord_equal()+theme_void()+theme(legend.position='none')
  heading(p,gsub('_',' ',sub('MI_','',id)))})
 mapblock<-wrap_plots(list(wrap_plots(maps,ncol=3),legend_strip(cc,gsub('_',' ',names(cc)),rows=2)),ncol=1,heights=c(1,.10))
 mi<-d[sample_id%in%ids];mi[,sample:=factor(sample_id,levels=ids,labels=c('D3r1','D3r2','D3r3','D7r1','D7r2','D7r3'))]
@@ -31,7 +31,7 @@ sel[,direction:=factor(shorten(direction_id))]
 pt<-ggplot(sel,aes(zone,kontextual,colour=sample,shape=direction))+geom_hline(yintercept=0,linewidth=.3,colour='#A8ADB3')+
  geom_point(position=position_dodge(width=.4),size=1.8)+scale_colour_manual(values=c(D7r1='#C7B6E3',D7r2='#9A78C6',D7r3='#72509E'))+scale_x_discrete(labels=c(Transition_corridor='Transition',Injury_core='Injury core'))+labs(x=NULL,y='Contextual L (µm)')+
  guides(colour=guide_legend(nrow=1),shape=guide_legend(nrow=1))+
- theme_editorial_v2()+theme(legend.position='bottom',legend.box='vertical',legend.title=element_blank(),axis.text.x=element_text(size=6))
+ theme_editorial_v2()+theme(legend.position='bottom',legend.box='horizontal',legend.title=element_blank(),axis.text.x=element_text(size=6))
 coverage<-d[,.(Evaluable=sum(status=='EVALUABLE'),Unavailable=sum(status!='EVALUABLE')),by=.(sample_id,cohort)]
 cv<-melt(coverage,id.vars=c('sample_id','cohort'),variable.name='status',value.name='relationships')
 cv[,sample_id:=factor(sample_id,levels=unique(coverage$sample_id))]
@@ -46,7 +46,7 @@ rows<-list(block(mapblock,'a','Dominant cell classes across infarct tissues'),
  block(heat,'b','Contextual relationships · 200 µm','×: absent class; –: absent region. Descriptive values; no significance test'),
  wrap_plots(list(block(pt,'c','Day 7 myeloid–fibroblast association'),block(coverageplot,'d','Evaluability across 22 tissues')),ncol=2,widths=c(1,1.15)),
  note('Mixture-dominant spots are not individual cells. CM: cardiomyocyte; Fib: fibroblast; Myel: mononuclear myeloid; Neu: neutrophil.'))
-heights<-c(63,94,59,5)
+heights<-c(70,94,52,5)
 ragg::agg_capture(width=183,height=225,units='mm',res=300)
 grobs<-lapply(seq_along(rows),function(i){
  g<-patchworkGrob(wrap_plots(list(rows[[i]])) & theme(plot.margin=margin(0,0,0,0)))

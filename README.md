@@ -48,3 +48,5 @@ Physical tissues and single-nucleus biological samples remain the summary units.
 ## Final figure layout
 
 `figures/jtm_final_20261014` contains the final R/SCOP rendering sources for Figures 1–8 and Supplementary Figures S1–S18. Related views share grouped panels and legends, with a consistent blue, turquoise, coral and violet palette. Figure S18 now spans six pages to show all 72 native vector fields at a readable size. These scripts reuse completed scientific results; no analysis thresholds, candidate sets or statistical values were changed for the layout revision. The frozen canonical-marker heatmap preserves its original color mapping and matching scale. Earlier plotting directories remain historical versions.
+
+The subsequent layout refinement enlarges the reference UMAP and selected tissue panels, compacts shared color keys, separates count text from redundant markers, and gives the final two-tissue S15 page an appropriate height. The final rendering root is `22_JTM_completion_20261014/figures_polished`; unchanged supplements retain the preceding rendering. Scientific inputs and reported numerical values are unchanged.

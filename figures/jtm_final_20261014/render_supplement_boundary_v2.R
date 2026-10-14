@@ -28,7 +28,6 @@ if(wants('Figure_S12')){
   d[,size_tissue:=1.5+2*n_discovery_supporting_tissues/6]
   matrix<-ggplot(d,aes(y=axis))+geom_hline(yintercept=1:10,colour='#E5E9EC',linewidth=.2)+
     geom_text(aes(x=1,label=paste0(n_supported_stages,'/2')),size=7.1/GG_PT,family=FONT_V2)+
-    geom_point(aes(x=2,size=size_tissue),shape=21,fill='#CBDCEC',colour=COL_AXIS)+
     geom_text(aes(x=2,label=paste0(n_discovery_supporting_tissues,'/6')),size=7.1/GG_PT,family=FONT_V2)+
     geom_tile(aes(x=3,fill=minimum_component_coverage),width=.75,height=.8)+
     geom_text(aes(x=3,label=sprintf('%.0f%%',100*minimum_component_coverage)),size=7.1/GG_PT,family=FONT_V2)+

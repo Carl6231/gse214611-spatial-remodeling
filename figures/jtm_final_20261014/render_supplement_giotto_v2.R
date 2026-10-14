@@ -55,6 +55,6 @@ pages4<-atlas_pages(s4,'Supplementary Figure S4 | Slice-local spatial organizati
   'Frozen Giotto coordinates and edges; table-derived rendering. Local HMRF labels and colors are not aligned across tissues.',per_page=4)
 pages5<-atlas_pages(s5,'Supplementary Figure S5 | Slice-local spatial features',
   'Saved top-five order. SVG scores are slice-specific; correlation uses a shared −1 to +1 color scale. No analysis was rerun.',
-  legend=continuous_bar_v2(c(-1,1),c(COL_CONTRACTILE,'white',COL_FIBROTIC),'Spatial correlation',midpoint=0,vertical=FALSE))
+  legend=wrap_elements(full=grobTree(rasterGrob(matrix(colorRampPalette(c(COL_CONTRACTILE,'white',COL_FIBROTIC),space='Lab')(256),nrow=1),x=.5,y=.78,width=unit(60,'mm'),height=unit(1.6,'mm')),textGrob(c('-1','-0.5','0','0.5','1'),x=unit(.5,'npc')+unit(c(-30,-15,0,15,30),'mm'),y=.45,gp=gpar(fontfamily=FONT_V2,fontsize=7.1)),textGrob('Spatial correlation',x=.5,y=.08,gp=gpar(fontfamily=FONT_V2,fontsize=7.1)))))
 if(wants('Figure_S4'))export_supplement(pages4,'Figure_S4',170)
 if(wants('Figure_S5'))export_supplement(pages5,'Figure_S5',190)

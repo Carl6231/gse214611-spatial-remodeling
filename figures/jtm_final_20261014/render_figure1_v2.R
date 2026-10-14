@@ -1,6 +1,6 @@
 #!/usr/bin/env Rscript
 
-source("/home/zhenhanli/myocardial/scop/GSE214611_spatial/22_JTM_completion_20261014/figures_final/script/figure_common_v2.R")
+source("/home/zhenhanli/myocardial/scop/GSE214611_spatial/22_JTM_completion_20261014/figures_polished/script/figure_common_v2.R")
 
 BUILD_ROOT <- Sys.getenv("REDESIGN_V2_BUILD_ROOT", unset = "")
 if (!nzchar(BUILD_ROOT) || !dir.exists(BUILD_ROOT)) {
@@ -199,7 +199,7 @@ mixed_key <- ggplot(data.frame(
 hero_block <- wrap_plots(list(hero_plate, mixed_key), ncol = 1, heights = c(0.93, 0.07))
 panel_b <- evidence_header_v2(
   hero_block, "b", "Mixed-capture resolution",
-  "Resolved using author-provided barcode evidence; morphology was not used as a biological label"
+  "Author-provided barcode assignment; morphology does not define identity"
 )
 
 # c | Frozen six-tissue alignment plate.
@@ -220,7 +220,7 @@ alignment_labels <- c("Sham r1", "Sham r2", "MI 1 h",
 alignment_plate <- labeled_asset_grid(alignment_assets, alignment_labels, 6)
 panel_c <- evidence_header_v2(
   alignment_plate, "c", "Tissue alignment",
-  "Frozen six-tissue selection; the complete 12-tissue atlas remains in Figure S1"
+  "Six fixed tissues; complete atlas in Figure S1"
 )
 
 # d | Retained-spot lollipop.
@@ -267,10 +267,10 @@ qc_plot <- ggplot(qc_summary, aes(sample_key, median, colour = role)) +
                                       "D7r1", "D7r2", "D7r3", "1h", "4h", "N3", "N4"),
                                     sample_order_v2)) +
   labs(x = NULL, y = "Median [IQR]") + theme_editorial_v2() +
-  theme(axis.text.x = element_text(angle = 55, hjust = 1),
+  theme(axis.text.x = element_text(angle = 65, hjust = 1, size = 6.2),
         panel.spacing.x = unit(3.0, "mm"), plot.margin = margin(1, 1, 1, 1, unit = "mm"))
 panel_e <- evidence_header_v2(qc_plot, "e", "Descriptive QC summaries",
-                              "Median and IQR across spots within each physical tissue; no universal cutoff")
+                              "Within-tissue median and IQR; no universal cutoff")
 
 # f | Six-cell-type reference composition.
 reference[, display := gsub("_", " ", celltype)]
@@ -326,7 +326,7 @@ marker_heat <- ggplot(marker, aes(sample_key, celltype, fill = median_positive_f
   scale_x_discrete(labels = sample_labels_v2[sample_order_v2]) +
   scale_y_discrete(labels = function(x) gsub("_", " ", x)) +
   labs(x = NULL, y = NULL) + theme_editorial_v2() +
-  theme(axis.text.x = element_text(angle = 55, hjust = 1),
+  theme(axis.text.x = element_text(angle = 65, hjust = 1, size = 6.2),
         axis.line = element_blank(), axis.ticks = element_blank(),
         legend.position = "right", plot.margin = margin(1, 1, 1, 1, unit = "mm"))
 compatibility_block <- wrap_plots(list(common_plot, marker_heat), ncol = 2, widths = c(0.27, 0.73))
@@ -369,7 +369,7 @@ figure1 <- wrap_plots(list(
   wrap_plots(list(panel_d, panel_e), ncol = 2, widths = c(0.32, 0.68)),
   wrap_plots(list(panel_f, panel_g), ncol = 2, widths = c(0.28, 0.72)),
   panel_h
-), ncol = 1, heights = c(0.9, 1.65, 1.30, 1.85, 1.8, 1.1)) &
+), ncol = 1, heights = c(0.9, 1.85, 1.15, 1.85, 1.8, 1.05)) &
   theme(plot.margin = margin(0.6, 0.8, 0.6, 0.8, unit = "mm"))
 
 paths <- export_page_v2(figure1)

@@ -1,6 +1,6 @@
 root<-'/home/zhenhanli/myocardial/scop/GSE214611_spatial'
 .libPaths(c(file.path(root,'21_scop_expansion/_runtime/spacet/R-4.5/site-library'),.libPaths()))
-source(file.path(root,'22_JTM_completion_20261014/figures_final/script/figure_remaining_helpers.R'))
+source(file.path(root,'22_JTM_completion_20261014/figures_polished/script/figure_remaining_helpers.R'))
 A<-file.path(root,'22_JTM_completion_20261014/P06_SECACT_parallel')
 stopifnot(file.exists(file.path(A,'_SUCCESS')))
 a<-fread(file.path(A,'tables/secact_activity.tsv.gz'))
@@ -48,11 +48,11 @@ v[,vector_fraction:=n_vectors/n_spots]
 vp<-ggplot(v,aes(sample,vector_fraction,colour=stage,shape=signal_mode))+geom_point(position=position_dodge(width=.45),size=1.7)+
  facet_wrap(~ligand,ncol=3)+scale_y_continuous(limits=c(0,1),breaks=c(0,.5,1))+scale_colour_manual(values=c(Day3=COL_D3,Day7=COL_D7))+scale_x_discrete(NULL,labels=labels_st)+
  labs(y='Fraction of spots with vectors',shape='Mode',colour='Stage')+quiet_theme+theme(axis.text.x=element_text(angle=45,hjust=1),legend.position='bottom')
-page<-wrap_plots(list(block(activity_pair,'a','Activity for six frozen ligands','Single-nucleus sample labels use SRR suffixes; modalities are not animal-paired'),
+page<-wrap_plots(list(block(activity_pair,'a','Activity for six frozen ligands','SRR suffixes identify nuclei samples; modalities are not animal-paired'),
  wrap_plots(list(block(cccplot,'b','Candidate-ligand communication','Counts across all source–receiver class pairs'),block(pattern_summary,'c','Tissue-specific patterns')),ncol=2),
- block(vp,'d','Sending and receiving vector coverage','Each point is one tissue; arrow lengths are display-scaled and not compared'),
+ block(vp,'d','Sending and receiving vector coverage','One tissue per point; native arrow lengths are not compared'),
  note('Activity and vector lengths are model quantities, not measured secretion, receptor activation or cellular movement.')),
- ncol=1,heights=c(70,52,93,6))
+ ncol=1,heights=c(66,48,101,6))
 export_remaining(page,'Figure_8')
 classes<-unique(a[modality=='snRNA',celltype_or_scope]);lim<-max(abs(a[modality=='snRNA' & secretedProtein%in%ligands,zscore]))
 allclass<-lapply(classes,function(ct)activity_heat(a[modality=='snRNA' & celltype_or_scope==ct],sn_ids,labels_sn,gsub('_',' ',ct),lim))
@@ -71,7 +71,7 @@ page2<-wrap_plots(list(strip_text_v2('Supplementary Figure S16 | Spatial summari
  heading(eligplot,'Retained nuclei per sample and class; source-step eligibility requires ≥30'),
  note('Zero edge counts mean no retained native edge. Source-step eligibility and model activity are distinct quantities.')),
  ncol=1,heights=c(6,64,60,82,7))
-export_supplement(list(page1,page2),'Figure_S16',225)
+if(wants('Figure_S16'))export_supplement(list(page1,page2),'Figure_S16',225)
 # Show every independently fitted spatial factor, without aligning factor numbers.
 pattern_source<-fread(file.path(A,'tables/secact_pattern_spot_loadings.tsv.gz'))
 stopifnot(all(is.finite(pattern_source$loading)),setequal(pattern_source$sample_id,st_ids))
@@ -91,7 +91,7 @@ pattern_pages<-lapply(c('D3','D7'),function(stage){
  list(note('Colour: H loading divided by its factor-specific maximum (0–1). Each row shows all factors selected for that tissue; factors are not aligned across rows.'))),
  ncol=1,heights=c(7,65,65,65,8))
 })
-export_supplement(pattern_pages,'Figure_S17',225)
+if(wants('Figure_S17'))export_supplement(pattern_pages,'Figure_S17',225)
 
 # Preserve all 72 native display fields, with no anatomical reorientation beyond
 # the backend's own coord_flip and no scientific interpretation of rescaled lengths.
@@ -118,4 +118,4 @@ vector_pages<-unlist(lapply(c('sending','receiving'),function(mode){
  ncol=1,heights=c(7,110,110,8))
 })
 }),recursive=FALSE)
-export_supplement(vector_pages,'Figure_S18',245)
+if(wants('Figure_S18'))export_supplement(vector_pages,'Figure_S18',245)

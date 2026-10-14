@@ -1,4 +1,4 @@
-source('/home/zhenhanli/myocardial/scop/GSE214611_spatial/22_JTM_completion_20261014/figures_final/script/figure_common_v2.R')
+source('/home/zhenhanli/myocardial/scop/GSE214611_spatial/22_JTM_completion_20261014/figures_polished/script/figure_common_v2.R')
 
 STAGE_V2 <- Sys.getenv('REMAINING_STAGE', file.path(V2, 'tmp', 'remaining_build'))
 stopifnot(startsWith(normalizePath(STAGE_V2, mustWork=FALSE), paste0(V2, '/tmp/')))
@@ -86,17 +86,22 @@ export_supplement <- function(pages,id,height=225) {
   pdf<-file.path(dest,paste0(id,'.pdf'))
   stopifnot(!file.exists(pdf))
   pages<-lapply(pages,function(p)p+plot_annotation(theme=theme(plot.margin=margin(2,2,2,2,unit='mm'))))
-  cairo_pdf(pdf,width=183/25.4,height=height/25.4,family='sans',onefile=TRUE)
-  for(p in pages)print(p)
-  dev.off()
+  heights <- rep(height,length.out=length(pages))
+  stopifnot(length(height)%in%c(1L,length(pages)),all(heights>0))
+  page_pdfs <- vapply(seq_along(pages),function(i){
+    tmp <- tempfile(fileext='.pdf')
+    cairo_pdf(tmp,width=183/25.4,height=heights[i]/25.4,family='sans')
+    print(pages[[i]]);dev.off();tmp
+  },character(1))
+  qpdf::pdf_combine(page_pdfs,output=pdf);unlink(page_pdfs)
   for(i in seq_along(pages)){
     suffix<-if(length(pages)==1L)'' else paste0('_p',i)
     svg<-file.path(dest,paste0(id,suffix,'.svg'))
     png<-file.path(STAGE_V2,'qa',paste0(id,suffix,'_render.png'))
     stopifnot(!any(file.exists(c(svg,png))))
-    svglite::svglite(svg,width=183/25.4,height=height/25.4,bg='white',system_fonts=list(sans=FONT_V2))
+    svglite::svglite(svg,width=183/25.4,height=heights[i]/25.4,bg='white',system_fonts=list(sans=FONT_V2))
     print(pages[[i]]);dev.off()
-    rsvg::rsvg_png(svg,png,width=2161,height=round(2161*height/183))
+    rsvg::rsvg_png(svg,png,width=2161,height=round(2161*heights[i]/183))
     stopifnot(all(file.info(c(svg,png))$size>1000))
   }
   stopifnot(file.info(pdf)$size>1000)

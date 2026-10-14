@@ -24,13 +24,13 @@ bytime<-ms[,.(nuclei=sum(Freq),samples=uniqueN(sample_id[Freq>0])),by=.(state,ti
 stopifnot(!anyDuplicated(bytime[,.(state,timepoint)]),sum(bytime$nuclei)==sum(ms$Freq))
 native_umap<-function(group,cols){
   p<-scop::CellDimPlot(balanced,group.by=group,reduction='FrozenBroadUMAP',label=FALSE,
-    show_stat=FALSE,pt.size=.14,pt.alpha=.72,palcolor=unname(cols),legend.position='none',
+    show_stat=FALSE,pt.size=.23,pt.alpha=.95,palcolor=unname(cols),legend.position='none',
     theme_use='theme_void',theme_args=list(base_family=FONT_V2,base_size=7.1),title='',subtitle='',xlab='',ylab='',combine=FALSE,raster=FALSE,verbose=FALSE)[[1]]
   while(inherits(p,'patchwork'))p<-p[[1]]
   aes<-unique(c(intersect(names(p$mapping),c('fill','colour')),unlist(lapply(p$layers,function(l)intersect(names(l$mapping),c('fill','colour'))))))
   stopifnot(length(aes)==1L)
   p<-suppressMessages(p+scale_colour_manual(values=cols,aesthetics=aes,drop=FALSE,guide='none'))
-  p+coord_equal()+theme_void(base_family=FONT_V2)+theme(plot.title=element_blank(),plot.subtitle=element_blank(),legend.position='none')
+  p+coord_equal(expand=FALSE)+theme_void(base_family=FONT_V2)+theme(plot.title=element_blank(),plot.subtitle=element_blank(),legend.position='none')
 }
 umap<-native_umap('P09_expanded_celltype',CELL[classes])
 balanced_plot<-ggplot(counts,aes(balanced_cells,factor(celltype,levels=rev(classes))))+
@@ -77,7 +77,7 @@ if(wants('Figure_3')){
   audit_text<-paste0(length(unique(ann$P6_cluster)),' original myeloid clusters  →  canonical-lineage audit  →  corrected broad classes\n',
     scales::comma(sum(ann$cluster_cells)),' audited nuclei; 176,526 full-reference nuclei; 18,849 in the balanced reference')
   a<-block(note(audit_text,6.5,.5),'a','Frozen reference correction')
-  b<-block(wrap_plots(list(heading(umap,'Corrected broad-class UMAP'),heading(heat,'Canonical lineage markers')),ncol=2,widths=c(.9,1.1)),'b','Reference identity and lineage markers')
+  b<-block(wrap_plots(list(heading(umap,'Corrected broad-class UMAP'),heading(heat,'Canonical lineage markers')),ncol=2,widths=c(.72,1.28)),'b','Reference identity and lineage markers')
   keys<-c('Sham_Day3_rep1','MI_Day3_rep2','MI_Day7_rep2')
   maps<-lapply(keys,function(k)heading(img_panel_compact_v2(spatial_category(file.path(ROOT,'objects/phase_09/deconvolution',paste0(k,'_phase09_expanded.rds')),
     'P09E_dominant_type',CELL,paste0('F3_broad_',k),width=54,height=36)),LABEL[k]))
@@ -96,7 +96,7 @@ if(wants('Figure_3')){
     e,block(cal_plot,'f','Mapping calibration'),
     wrap_plots(list(block(state_support,'g','Five-state support · n = samples'),h),ncol=2,widths=c(.43,.57)),
     note('Nuclei and spots are not biological replicates. 1 h/4 h are descriptive; Needle-pass is auxiliary.'))
-  heights<-c(10,48,48,43,28,39,5)
+  heights<-c(10,50,45,44,29,38,5)
   stopifnot(length(rows)==length(heights),sum(heights)==221)
   grobs<-lapply(seq_along(rows),function(i){p<-wrap_plots(list(rows[[i]])) & theme(plot.margin=margin(0,0,0,0));
     g<-patchworkGrob(p)

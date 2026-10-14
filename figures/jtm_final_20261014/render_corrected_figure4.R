@@ -1,5 +1,5 @@
-source('/home/zhenhanli/myocardial/scop/GSE214611_spatial/22_JTM_completion_20261014/figures_final/script/figure_common_v2.R')
-OUT <- file.path(ROOT,'22_JTM_completion_20261014/figures_final/corrected4')
+source('/home/zhenhanli/myocardial/scop/GSE214611_spatial/22_JTM_completion_20261014/figures_polished/script/figure_common_v2.R')
+OUT <- file.path(ROOT,'22_JTM_completion_20261014/figures_polished/corrected4')
 dir.create(file.path(OUT,'figures'),recursive=TRUE,showWarnings=FALSE)
 ASSET_V2 <- file.path(OUT,'tmp/f4_panels')
 dir.create(ASSET_V2,recursive=TRUE,showWarnings=FALSE)
@@ -60,7 +60,7 @@ counts <- md[P09N_center==TRUE,.(Assigned=sum(P09N_niche!='Uncertain'),Uncertain
 counts <- melt(counts,id.vars='sample_key',variable.name='assignment',value.name='centers')
 counts[,sample_key:=factor(sample_key,levels=keys)]
 p_b <- ggplot(counts,aes(sample_key,centers,fill=assignment))+geom_col(width=.75)+
-  scale_fill_manual(values=c(Assigned='#36B6A4',Uncertain='#6F6F6F'),name=NULL)+
+  scale_fill_manual(values=c(Assigned='#36B6A4',Uncertain='#AEB7C2'),name=NULL)+
   scale_x_discrete(labels=short)+labs(x=NULL,y='Centers')+theme(legend.position='right',axis.text.x=element_text(angle=45,hjust=1))
 pm <- merge(CJ(sample_key=keys,niche=niches),prev[,.(sample_key,niche,fraction)],all.x=TRUE)
 pm[is.na(fraction),fraction:=0]; pm[,sample_key:=factor(sample_key,levels=keys)]
@@ -121,11 +121,11 @@ draw_page <- function() {
   for(i in 1:6) {x<-8+((i-1)%%3)*59; y<-118+((i-1)%/%3)*4
     grid.points(x=unit(x,'mm'),y=unit(225-y,'mm'),pch=shapes[i],size=unit(1.7,'mm'),gp=gpar(col=COL_AXIS,fill=cols[i]))
     grid.text(c('Not a selected center',labs_niche)[i],x=unit(x+3,'mm'),y=unit(225-y,'mm'),just='left',gp=gpar(fontfamily=FONT_V2,fontsize=7.1))}
-  draw_plot(p_d,2,125,179,31,'d','Niche prevalence')
-  draw_plot(p_e,2,158,88,35,'e','Axis structure by niche','Median of tissue-level niche medians')
-  draw_plot(p_f,94,158,87,35,'f','Within-slice coherence','NE: no center-to-center edges')
-  draw_plot(p_g,2,195,88,28,'g','Remodeling axis')
-  draw_plot(p_h,94,195,87,28,'h','Leave-one-tissue-out stability')
+  draw_plot(p_d,2,125,179,29,'d','Niche prevalence')
+  draw_plot(p_e,2,156,88,36,'e','Axis structure by niche','Median of tissue-level niche medians')
+  draw_plot(p_f,94,156,87,36,'f','Within-slice coherence','NE: no center-to-center edges')
+  draw_plot(p_g,2,194,88,29,'g','Remodeling axis')
+  draw_plot(p_h,94,194,87,29,'h','Leave-one-tissue-out stability')
 }
 pdf<-file.path(OUT,'figures/Figure_4_corrected.pdf'); svg<-sub('pdf$','svg',pdf); png<-sub('pdf$','png',pdf)
 stopifnot(!any(file.exists(c(pdf,svg,png))))

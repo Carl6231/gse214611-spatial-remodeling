@@ -30,10 +30,10 @@ mi3 <- wrap_plots(lapply(FORMAL[3:5],function(k) heading(img_panel_compact_v2(ma
 mi7 <- wrap_plots(lapply(FORMAL[6:8],function(k) heading(img_panel_compact_v2(maps[[k]]),LABEL[k])),ncol=3)
 atlas <- wrap_plots(list(sham,wrap_plots(list(mi3,mi7),ncol=1)),ncol=2,widths=c(1,3.08))
 key<-wrap_elements(full=grobTree(
-  rasterGrob(matrix(colorRampPalette(colours,space='Lab')(256),nrow=1),x=.5,y=.72,width=.98,height=unit(1.4,'mm')),
-  textGrob('0',x=.01,y=.15,just='left',gp=gpar(fontfamily=FONT_V2,fontsize=7.1)),
+  rasterGrob(matrix(colorRampPalette(colours,space='Lab')(256),nrow=1),x=.5,y=.72,width=unit(40,'mm'),height=unit(1.8,'mm')),
+  textGrob('0',x=unit(.5,'npc')-unit(23,'mm'),y=.72,just='right',gp=gpar(fontfamily=FONT_V2,fontsize=7.1)),
   textGrob('RCTD macrophage fraction',x=.5,y=.15,gp=gpar(fontfamily=FONT_V2,fontsize=7.1)),
-  textGrob('1',x=.99,y=.15,just='right',gp=gpar(fontfamily=FONT_V2,fontsize=7.1))))
+  textGrob('1',x=unit(.5,'npc')+unit(23,'mm'),y=.72,just='left',gp=gpar(fontfamily=FONT_V2,fontsize=7.1))))
 atlas <- wrap_plots(list(atlas,key),ncol=1,heights=unit.c(unit(1,'null'),unit(6,'mm')))
 a <- block(atlas,'a','Macrophage spatial distribution')
 
@@ -98,5 +98,5 @@ page <- wrap_plots(list(a,
   wrap_plots(list(b,c,d),ncol=3,widths=c(1,1,1.6)),e,
   wrap_plots(list(f,g),ncol=2),h,
   note('One point = one physical tissue. Rich-area cutoff: RCTD macrophage ≥0.20. 1 h/4 h: descriptive; N3/N4: auxiliary.')),
-  ncol=1,heights=c(82,39,33,35,27,5))
+  ncol=1,heights=c(77,40,38,36,25,5))
 export_remaining(page,'Figure_2')
