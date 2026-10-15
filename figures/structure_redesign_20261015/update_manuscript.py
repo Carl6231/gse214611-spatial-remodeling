@@ -46,7 +46,9 @@ commit=os.environ.get('JTM_CODE_COMMIT')
 if commit:
  assert re.fullmatch('[0-9a-f]{40}',commit)
  for p in d.paragraphs:
-  for r in p.runs:r.text=re.sub(r'/tree/[0-9a-f]{40}', '/tree/'+commit,r.text)
+  for r in p.runs:
+   updated=re.sub(r'/tree/[0-9a-f]{40}', '/tree/'+commit,r.text)
+   if updated!=r.text:r.text=updated
 assert len(d.inline_shapes)==8 and len(d.tables)==3
 assert [p.text for p in original.paragraphs[:18]]==[p.text for p in d.paragraphs[:18]]
 assert [[c.text for row in t.rows for c in row.cells] for t in original.tables]==[[c.text for row in t.rows for c in row.cells] for t in d.tables]
