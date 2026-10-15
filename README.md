@@ -2,6 +2,18 @@
 
 Analysis and figure-generation sources associated with **Spatial remodeling and tissue composition after myocardial infarction in mice**.
 
+## Current figure structure redesign (15 October 2026)
+
+`figures/structure_redesign_20261015` is the current display source. It supersedes the typography-only pass while preserving the completed scientific outputs. The set comprises Figures 1–8 and S1–S20; the captioned supplement retains 74 figure pages plus the guide and six tables (78 pages total).
+
+The main figures were rebuilt around tissue identity, initial deconvolution, reference correction, corrected neighborhoods, composition dependence, distinct candidate-evidence layers, contextual heterogeneity and SecAct model outputs. Figure 3 now connects the 18,438-nucleus audit to the 8,693 retained macrophages and paired spatial estimates. Figure 5a leads with joint-model dependence. Figure 6 uses explicit ranks and CellChat values, with perturbation summaries separate from the candidate-axis table. Figure 8 retains all 72 vector coverages and condenses the 36 identical candidate-edge zeros without changing them.
+
+Supplement S17 groups only the independently fitted factors in each tissue and leaves no empty factor slots. S18 places sending and receiving side by side within each tissue block. S19 adds descriptive largest-coefficient distributions to contextualize the reference-component maps. S20 retains all 120 component-by-tissue views. The 0–1 coefficient and macrophage-fraction maps use an explicitly labelled square-root colour transform; numerical coefficients are unchanged. The Figure 3 marker display explicitly caps the stored log2 CPM ratio colour scale at ±4. Complete underlying values and missing/negative outcomes remain in their original result sources.
+
+Run the redesign scripts from the original project directory, with the `11_图件结构重设计_20261015/source_data` cache populated from the completed results. The `collect_*` scripts serialize saved tables and plot objects on the original analysis server; they perform no scientific-model fitting. `design_common.R` contains the rendering style and page composition helpers. `redesign_figure3.R`, `redesign_figures1247.R`, `redesign_figures568.R`, `redesign_supplement1to16.R` and `redesign_supplement171820.R` produce the figures. `assemble_supplement.R` and `update_manuscript.py` synchronize the captioned documents and panel references. The local redesign used R 4.5, SCOP 0.9.0, ggplot2, patchwork, cairo, svglite and ragg; source extraction reused the server SCOP 0.9.1 environment.
+
+The large Seurat objects and serialized plot caches are not bundled. This remains a source archive with existing-input requirements, not a validated raw-GEO-to-manuscript reconstruction. Presentation changes do not strengthen the cross-species tumor-reference evidence or turn computational predictions into experimental validation.
+
 ## Scope and entry points
 
 The archive includes sources recovered from the original analysis server on 14 October 2026, the subsequent Statial/SecAct completion scripts, revised publication plotting sources, and six machine-readable supplementary summary tables. It is a source archive with retained input contracts, not a standalone workflow that reconstructs every result directly from raw GEO downloads.
@@ -45,7 +57,7 @@ The original outputs used SCOP 0.8.9 and 0.9.0. The completion and revised plott
 
 Physical tissues and single-nucleus biological samples remain the summary units. Spots, overlapping neighborhoods, nuclei and duplicated ligand-to-receptor mappings are not independent biological replicates. Dominant-mixture contextual relationships, original-label communication candidates, corrected-reference neighborhoods and simulated perturbations retain distinct provenance. Unavailable relationships are not zero effects; completed computations do not establish causality or experimental validation.
 
-## Final main and supplementary figure structure
+## Prior main and supplementary figure structure
 
 `figures/jtm_final_20261014` contains the current R/SCOP rendering sources for Figures 1–8 and Supplementary Figures S1–S18. Related views share grouped panels and legends with a consistent blue, turquoise, coral and violet palette. The scripts reuse completed scientific results; scientific thresholds, candidate sets, input objects and statistical values are preserved. The frozen canonical-marker heatmap retains its original color mapping and scale.
 
@@ -86,7 +98,7 @@ The input contract is `objects/phase_09/deconvolution/<sample>_phase09_expanded.
 
 The software reference is fixed at SpatialEcoTyper commit `64c52f3fb79efcbf1bf8aea7d80d7d0b1bb505c4`. Supplementary Additional file 16 contains numerical outputs, coordinates, coverage, execution log and session information. Tissue means and medians are descriptive; neither reference coverage nor computational completion validates tumor-to-myocardium transfer. Existing rule-defined cardiac neighborhoods remain separate.
 
-## Figure refinement (15 October 2026)
+## Prior typography refinement (15 October 2026)
 
 `figures/refinement_20261015` contains the final display-only pass. `refine_vector_typography.R` strengthens small labels in the existing SVG figures while retaining their text contents, explicit text widths and scientific graphical elements. It consumes the assembled project figure folders; it is not an analysis producer. `refine_model_atlases.R` uses saved SecAct loadings and SpatialEcoTyper RDS/tissue summaries. S17 has fixed-size map slots and a shared within-factor loading key. S19 separates formal-comparison tissues from descriptive/auxiliary tissues. S20 is organized by reference component (10 pages, 12 tissues per page), retains all 120 spatial views and adds the already-saved tissue medians and interquartile ranges. IQR describes within-tissue spot heterogeneity, not biological-replicate uncertainty. Reference coefficients and the shared 0–1 spatial color scale are unchanged.
 
