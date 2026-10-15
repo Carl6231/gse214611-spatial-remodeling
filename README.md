@@ -68,4 +68,20 @@ Current sources use the rendering root `22_JTM_completion_20261014/figures_revie
 
 The final consistency pass uses corrected S054 center accounting in Figure 1h, preserves the initial six-class reference in Figures 1f–g and 2, and orders Figure 7d consistently with S15. Numerically constant CellOracle transition summaries are displayed with a neutral color rather than amplifying floating-point noise during within-metric standardization. The corrected niche atlas uses the same uncertainty color as Figure 4; Day 7 replicate colors are consistent across the S9 covariate displays.
 
-SpatialEcoTyper has not been executed for GSE214611 and contributes no figure or result in this manuscript. Its installed default reference describes tumor spatial ecotypes. The official Visium workflow uses reference-based ecotype deconvolution; no matched myocardial-infarction spatial-ecotype reference was identified among the project inputs. Existing rule-defined neighborhoods must not be relabelled as SpatialEcoTyper outputs.
+## SpatialEcoTyper reference projection (15 October 2026)
+
+`analysis/spatialecotyper_20261015/run_spatialecotyper.R` was executed through SCOP 0.9.1 and SpatialEcoTyper 1.0.3 for all 12 GSE214611 Visium tissues (25,548 spots). `figures/spatialecotyper_20261015/plot_spatialecotyper.R` renders the overview and complete 120-view atlas used in Supplementary Figures S19–S20. The final captioned PDF assembly preserves the numerical figures and adds supplementary numbering and legends.
+
+This is an exploratory mouse-to-human projection onto the packaged tumor reference, not de novo cardiac ecotype discovery. The inference uses raw Spatial counts from the existing phase_09 tissue objects, SecAct 1.1.0 mouse-to-human mapping, log1p CP10K normalization on the full mapped transcriptome, native within-tissue scaling, and the fixed Bulk_SE_Recovery_W matrix. It retains native seed 39, fitting/stopping rules, batches of 500 spots, two workers and sum-to-one coefficients. Each tissue maps 462 of 499 reference genes; 401–448 have nonzero counts. All spots are retained, and finite/non-negative coefficients and row sums are checked. Reference labels are not cardiac cell identities or measured cell fractions.
+
+The scripts accept the original project root and an existing output directory:
+
+```sh
+mkdir -p "$PROJECT_OUTPUT"
+OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1 Rscript analysis/spatialecotyper_20261015/run_spatialecotyper.R "$PROJECT_ROOT" "$PROJECT_OUTPUT"
+OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1 Rscript figures/spatialecotyper_20261015/plot_spatialecotyper.R "$PROJECT_ROOT" "$PROJECT_OUTPUT"
+```
+
+The input contract is `objects/phase_09/deconvolution/<sample>_phase09_expanded.rds` under the project root. Full input expression objects and the package's reference matrix are not bundled in this repository. The figure script also reads the input tissue objects; standalone output tables alone do not replace those dependencies. It reuses saved coefficients and does not refit the model. The largest displayed component is a relative maximum, without a confidence threshold; continuous maps share a 0–1 scale. Spatial component views use native SCOP plotting and the categorical overview uses ggplot2 to avoid duplicated legends.
+
+The software reference is fixed at SpatialEcoTyper commit `64c52f3fb79efcbf1bf8aea7d80d7d0b1bb505c4`. Supplementary Additional file 16 contains numerical outputs, coordinates, coverage, execution log and session information. Tissue means and medians are descriptive; neither reference coverage nor computational completion validates tumor-to-myocardium transfer. Existing rule-defined cardiac neighborhoods remain separate.
