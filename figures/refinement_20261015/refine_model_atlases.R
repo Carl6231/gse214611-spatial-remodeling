@@ -42,7 +42,7 @@ map<-function(k,component=NULL){v<-z[[k]];d<-data.table(x=v$coordinates$x,y=v$co
  if(is.null(component)){d[,value:=factor(components[max.col(v$abundance,ties.method='first')],levels=components)]}else d[,value:=v$abundance[,component]]
  p<-ggplot(d,aes(x,y,colour=value))+geom_point(size=.52,stroke=0)+scale_y_reverse()+coord_equal()+labs(title=labels[k])+theme_void(base_family=font)+theme(plot.title=element_text(size=8,hjust=.5,face='bold',colour=rolecols[k]),plot.margin=margin(1,1,1,1),legend.position='none')
  p<-if(is.null(component))p+scale_colour_manual(values=palette,limits=components,drop=FALSE)else p+scale_colour_gradientn(colours=sequential,limits=c(0,1),breaks=c(0,.25,.5,.75,1),name='Coefficient')
- wrap_elements(full=ggplotGrob(p))
+ wrap_plots(list(wrap_elements(full=textGrob(labels[k],x=.5,y=.5,gp=gpar(fontfamily=font,fontsize=8,fontface='bold',col=rolecols[k]))),wrap_elements(full=ggplotGrob(p+labs(title=NULL)))),ncol=1,heights=unit.c(unit(5,'mm'),unit(1,'null')))
 }
 palette<-setNames(c('#AAB5C0','#168FAE','#43B6C5','#47B49C','#8DCFA7','#6B91D4','#9383C6','#C2A4DE','#ED8596','#F5AD8E'),components)
 leg<-ggplot(data.frame(x=seq(0,1,length.out=200),y=1),aes(x,y,fill=x))+geom_tile()+scale_fill_gradientn(colours=sequential,limits=c(0,1),guide='none')+scale_x_continuous('Reference coefficient (same 0-1 scale on every page)',breaks=c(0,.25,.5,.75,1),expand=c(0,0))+theme_classic(base_size=8,base_family=font)+theme(axis.text.y=element_blank(),axis.ticks.y=element_blank(),axis.title.y=element_blank(),axis.line.y=element_blank(),plot.margin=margin(0,100,0,100))
